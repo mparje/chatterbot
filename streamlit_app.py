@@ -1,4 +1,5 @@
 import streamlit as st
+import matplotlib.pyplot as plt
 
 # Define the Streamlit application
 def main():
@@ -20,17 +21,48 @@ def main():
 
         # Display the floor plan
         st.subheader("Floor Plan")
-        st.image(floor_plan, use_column_width=True)
-
-    # Customization options
-    st.sidebar.subheader("Customize Floor Plan")
-    layout_style = st.sidebar.selectbox("Layout Style", ["Open", "Closed"])
-    furniture_placement = st.sidebar.selectbox("Furniture Placement", ["Default", "Custom"])
-
-    # Additional customization features and functionality can be added here
+        st.pyplot(floor_plan)
 
 # Function to generate the floor plan
 def generate_floor_plan(length, width, num_rooms):
-    # Add your floor plan generation logic here
-    # You can use libraries like matplotlib or plotly to create the floor plan
-    # Return the generated floor plan as an image or plot
+    # Create a figure and axis for the floor plan
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    # Set the axis limits based on the house dimensions
+    ax.set_xlim(0, length)
+    ax.set_ylim(0, width)
+
+    # Draw the house boundary
+    house_boundary = plt.Rectangle((0, 0), length, width, fill=False, edgecolor='black', linewidth=2)
+    ax.add_patch(house_boundary)
+
+    # Generate and position the rooms
+    for room_num in range(1, num_rooms+1):
+        room_length = st.number_input(f"Room {room_num} Length (in meters)", min_value=1, step=1)
+        room_width = st.number_input(f"Room {room_num} Width (in meters)", min_value=1, step=1)
+        room_x = st.number_input(f"Room {room_num} X position", min_value=0, max_value=length-room_length, step=1)
+        room_y = st.number_input(f"Room {room_num} Y position", min_value=0, max_value=width-room_width, step=1)
+
+        room = plt.Rectangle((room_x, room_y), room_length, room_width, fill=True, alpha=0.5)
+        ax.add_patch(room)
+
+        # Add room labels
+        ax.text(room_x + room_length / 2, room_y + room_width / 2, f"Room {room_num}", ha='center', va='center')
+
+    # Set axis labels and title
+    ax.set_xlabel('Length (m)')
+    ax.set_ylabel('Width (m)')
+    ax.set_title('Floor Plan')
+
+    # Remove the axis ticks
+    ax.set_xticks([])
+    ax.set_yticks([])
+
+    # Adjust the layout
+    plt.tight_layout()
+
+    return fig
+
+# Run the Streamlit application
+if __name__ == "__main__":
+    main()
