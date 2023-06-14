@@ -35,6 +35,4 @@ def generate_floor_plan(length, width, num_rooms):
     # You can use libraries like matplotlib or plotly to create the floor plan
     # Return the generated floor plan as an image or plot
 
-# Run the Streamlit application
-if __name__ == "__main__":
-    main()
+
