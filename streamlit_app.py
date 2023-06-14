@@ -1,46 +1,40 @@
 import streamlit as st
-from chatterbot import ChatBot
-from chatterbot.trainers import ChatterBotCorpusTrainer
-import openai
-import os
 
-# Configurar la API de OpenAI
-openai.api_key = os.environ.get("OPENAI_API_KEY")
+# Define the Streamlit application
+def main():
+    # Set the page title and layout
+    st.title("Floor Plan Generator")
+    st.sidebar.title("Customization Options")
+    st.sidebar.markdown("Adjust the settings to customize the floor plan.")
 
+    # Add input fields for house dimensions
+    st.subheader("House Dimensions")
+    house_length = st.number_input("Length (in meters)", min_value=1, step=1)
+    house_width = st.number_input("Width (in meters)", min_value=1, step=1)
+    num_rooms = st.number_input("Number of Rooms", min_value=1, step=1)
 
+    # Generate floor plan on button click
+    if st.button("Generate Floor Plan"):
+        # Call a function to generate the floor plan based on the provided dimensions
+        floor_plan = generate_floor_plan(house_length, house_width, num_rooms)
 
-# Crear una instancia del ChatBot
-bot = ChatBot('VendedorBot')
+        # Display the floor plan
+        st.subheader("Floor Plan")
+        st.image(floor_plan, use_column_width=True)
 
-# Entrenar el bot con datos de entrenamiento
-trainer = ChatterBotCorpusTrainer(bot)
-trainer.train('chatterbot.corpus.spanish')
+    # Customization options
+    st.sidebar.subheader("Customize Floor Plan")
+    layout_style = st.sidebar.selectbox("Layout Style", ["Open", "Closed"])
+    furniture_placement = st.sidebar.selectbox("Furniture Placement", ["Default", "Custom"])
 
-# Función para generar respuestas utilizando GPT-3
-def generate_response(input_text):
-    response = openai.Completion.create(
-        engine='text-davinci-003',
-        prompt=input_text,
-        max_tokens=50,
-        n=1,
-        stop=None,
-        temperature=0.7
-    )
-    return response.choices[0].text.strip()
+    # Additional customization features and functionality can be added here
 
-# Configurar la interfaz de Streamlit
-st.title('Asistente de Vendedores de Inmuebles')
+# Function to generate the floor plan
+def generate_floor_plan(length, width, num_rooms):
+    # Add your floor plan generation logic here
+    # You can use libraries like matplotlib or plotly to create the floor plan
+    # Return the generated floor plan as an image or plot
 
-# Función para obtener la respuesta del bot
-def get_bot_response(user_input):
-    bot_response = bot.get_response(user_input).text
-    if bot_response == 'No se que responder':
-        bot_response = generate_response(user_input)
-    return bot_response
-
-# Interacción con el usuario
-user_input = st.text_input('Tú:')
-
-if user_input:
-    bot_response = get_bot_response(user_input)
-    st.text(f'Bot: {bot_response}')
+# Run the Streamlit application
+if __name__ == "__main__":
+    main()
