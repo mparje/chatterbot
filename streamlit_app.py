@@ -1,3 +1,4 @@
+import random
 import streamlit as st
 import matplotlib.pyplot as plt
 
@@ -36,12 +37,12 @@ def generate_floor_plan(length, width, num_rooms):
     house_boundary = plt.Rectangle((0, 0), length, width, fill=False, edgecolor='black', linewidth=2)
     ax.add_patch(house_boundary)
 
-    # Generate and position the rooms
+    # Generate and position the rooms randomly
     for room_num in range(1, num_rooms+1):
-        room_length = st.number_input(f"Room {room_num} Length (in meters)", min_value=1, step=1)
-        room_width = st.number_input(f"Room {room_num} Width (in meters)", min_value=1, step=1)
-        room_x = st.number_input(f"Room {room_num} X position", min_value=0, max_value=length-room_length, step=1)
-        room_y = st.number_input(f"Room {room_num} Y position", min_value=0, max_value=width-room_width, step=1)
+        room_length = random.randint(1, length)
+        room_width = random.randint(1, width)
+        room_x = random.randint(0, length - room_length)
+        room_y = random.randint(0, width - room_width)
 
         room = plt.Rectangle((room_x, room_y), room_length, room_width, fill=True, alpha=0.5)
         ax.add_patch(room)
