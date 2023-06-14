@@ -5,7 +5,7 @@ import openai
 import os
 
 # Configurar la API de OpenAI
-
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 
 
