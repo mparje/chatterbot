@@ -39,10 +39,10 @@ def generate_floor_plan(length, width, num_rooms):
 
     # Generate and position the rooms randomly
     for room_num in range(1, num_rooms+1):
-        room_length = random.randint(1, length)
-        room_width = random.randint(1, width)
-        room_x = random.randint(0, length - room_length)
-        room_y = random.randint(0, width - room_width)
+        room_length = random.uniform(1, length)
+        room_width = random.uniform(1, width)
+        room_x = random.uniform(0, length - room_length)
+        room_y = random.uniform(0, width - room_width)
 
         room = plt.Rectangle((room_x, room_y), room_length, room_width, fill=True, alpha=0.5)
         ax.add_patch(room)
